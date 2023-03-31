@@ -3,7 +3,9 @@ import smtplib
 from email.message import EmailMessage
 
 # add google password received from generating one
-password = "your_password"
+PASSWORD = "your_password"
+SENDER = 'your_email'
+RECEIVER = 'your_email'
 
 def send_email(img_path):
     email_message = EmailMessage
@@ -14,4 +16,12 @@ def send_email(img_path):
         content = file.read()
     email_message.add_attachment(content, maintype='image', subtype=imghdr.what(None, content))
 
+    gmail = smtplib.SMTP('smtp.gmail.com', 587)
+    gmail.ehlo()
+    gmail.starttls()
+    gmail.login(SENDER, PASSWORD)
+    gmail.sendmail(SENDER, RECEIVER, email_message.as_string())
+    gmail.quit()
 
+if __name__ == '__main__':
+    send_email(img_path='image/19.png')
